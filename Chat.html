@@ -2,19 +2,26 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Đề thi - Hữu Hào</title>
+  <title>Tài liệu - Hữu Hào</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
+      margin: 0;
       font-family: 'Poppins', sans-serif;
       background: #f9f9f9;
-      padding: 40px;
+      color: #333;
+    }
+    header, footer {
+      background: #cd0b3c;
+      color: white;
+      padding: 20px;
+      text-align: center;
     }
     nav {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      background: #c30632;
+      background: #b0022d;
     }
 
    nav a {
@@ -36,36 +43,33 @@ nav a:hover {
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin: 10px 0;
-    }
-    a.de-thi {
-      color: #b71440;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    a.de-thi:hover {
-      text-decoration: underline;
+    main {
+      padding: 40px;
+      text-align: left;
+      max-width: 800px;
+      margin: auto;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Tài liệu học tập</h1>
+  </header>
   <nav>
     <a href="index.html">Trang chủ</a>
-    <a href="tai-lieu.html">Tài liệu tham khảo</a>
+    <a href="tai-lieu.html">Tài liệu</a>
     <a href="https://chatgpt.com/" target="_blank">Chat với AI</a>
-    <a href="sgk.html">Sách Giáo Khoa</a>
+    <a href="sgk.html">Tài liệu</a>
   </nav>
-
-  <h1>Danh sách đề thi</h1>
-  <ul>
-  
-    <li><a class="de-thi" href="KIẾN THỨC CẦN NẮM.docx" target="_blank">TIN HỌC THPT</a></li>
-    <li><a class="de-thi" href="Chuẩn KT TIN 10.docx" target="_blank">CHUẨN KIẾN THỨC TIN 10</a></li>
-  </ul>
+  <main>
+    <h2>Danh sách tài liệu</h2>
+    <ul>
+      <li><a href="tai-lieu/Tin-hoc-10.pdf" download>Tin học lớp 10 - sách giáo viên (PDF)</a></li>
+      <li><a href="tai-lieu/Bai-tap-lon.docx" download>Bài tập lớn (Word)</a></li>
+    </ul>
+  </main>
+  <footer>
+    © Hữu Hào - Tài liệu học tập
+  </footer>
 </body>
 </html>
