@@ -6,56 +6,105 @@
   <title>Hữu Hào</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: #f9f9f9;
+      background: #f0f4f8;
       color: #333;
+      line-height: 1.6;
     }
+
     header {
-      background: #0077cc;
+      background: linear-gradient(to right, #0077cc, #005fa3);
       color: white;
-      padding: 20px 40px;
+      padding: 40px 20px;
       text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
     nav {
       display: flex;
       justify-content: center;
-      background: #005fa3;
+      background: #004f8a;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.05);
     }
+
     nav a {
       color: white;
-      padding: 14px 20px;
-      display: inline-block;
+      padding: 16px 24px;
       text-decoration: none;
       font-weight: 600;
+      transition: background 0.3s ease, color 0.3s ease;
     }
+
     nav a:hover {
       background: #003f73;
+      color: #e0f0ff;
     }
+
     main {
-      padding: 40px;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
       text-align: center;
     }
-    .button {
-      background: #0077cc;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      font-weight: 600;
+
+    main h2 {
+      font-size: 1.8em;
+      color: #005fa3;
+    }
+
+    .search-box {
+      margin-top: 30px;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px 16px;
       font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
+      border: 2px solid #0077cc;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s ease;
     }
-    .button:hover {
-      background: #005fa3;
+
+    .search-input:focus {
+      border-color: #005fa3;
     }
+
     footer {
-      background: #eee;
+      background: #f5f5f5;
       text-align: center;
       padding: 20px;
-      margin-top: 40px;
+      margin-top: 60px;
       font-size: 14px;
+      color: #777;
+      border-top: 1px solid #ddd;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+      }
+
+      nav a {
+        padding: 12px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      main h2 {
+        font-size: 1.4em;
+      }
     }
   </style>
 </head>
@@ -66,15 +115,39 @@
   <nav>
     <a href="index.html">Trang chủ</a>
     <a href="de-thi.html">Đề thi</a>
-     <a href="https://chatgpt.com/" target="_blank">Tài liệu</a>
+    <a href="https://chatgpt.com/" target="_blank">Tài liệu</a>
   </nav>
   <main>
     <h2>Website học tập của Hữu Hào</h2>
-    <p>Chia sẻ kiến thức, tài liệu, và bài tập trắc nghiệm Tin học</p>
-   
+    <p>Chia sẻ kiến thức, tài liệu Tin học.</p>
+    
+    <div class="search-box">
+      <form id="searchForm">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Nhập từ khóa tìm kiếm..."
+          required
+        />
+      </form>
+    </div>
   </main>
   <footer>
-    © Bản quyền thuộc về Hữu Hào. Tất cả quyền được bảo lưu.
+    © Bản quyền thuộc về <strong>Hữu Hào</strong>. Tất cả quyền được bảo lưu.
   </footer>
+
+  <script>
+  document.getElementById('searchForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const query = document.getElementById('searchInput').value.trim();
+    if (query) {
+      // Chuyển hướng tới Google với truy vấn
+      const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+      window.location.href = googleSearchUrl;
+    }
+  });
+</script>
+
 </body>
 </html>
