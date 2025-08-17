@@ -291,11 +291,19 @@
     </div>
   </main>
 
-  <footer>
-    © Bản quyền thuộc về <strong>Hữu Hào</strong>. Tất cả quyền được bảo lưu.
-  </footer>
+    <footer style="display: flex; justify-content: space-between; align-items: center; padding: 18px 100px;">
+  <div>
+    © 2025 Website cá nhân | Developed by <strong>Hữu Hào</strong>.
+  </div>
+  <div>
+    👀 Lượt truy cập: <span id="view-count">...</span>
+  </div>
+</footer>
+
+
 
   <script>
+    // Giữ nguyên phần xử lý form tìm kiếm của bạn
     document.getElementById('searchForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const query = document.getElementById('searchInput').value.trim();
@@ -304,6 +312,52 @@
         window.open(googleSearchUrl, '_blank');
       }
     });
+
+    // ====== BỘ ĐẾM LƯỢT TRUY CẬP (CountAPI) ======
+    (async () => {
+      const NAMESPACE = 'huu-hao-website'; // đặt tên riêng, không trùng ai
+      const KEY = 'homepage';              // tên trang
+      const viewEl = document.getElementById('view-count');
+
+      // timeout helper để tránh treo
+      const fetchWithTimeout = (url, ms = 6000) => {
+        const c = new AbortController();
+        const t = setTimeout(() => c.abort(), ms);
+        return fetch(url, { signal: c.signal }).finally(() => clearTimeout(t));
+      };
+
+      try {
+        // 1) Tạo (init) nếu chưa có: giá trị bắt đầu = 0 (không sao nếu đã tồn tại)
+        await fetchWithTimeout(
+          `https://api.countapi.xyz/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`
+        );
+
+        // 2) Tăng và lấy giá trị mới
+        const res = await fetchWithTimeout(
+          `https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`
+        );
+        const data = await res.json();
+
+        if (data && typeof data.value === 'number') {
+          viewEl.textContent = data.value.toLocaleString('vi-VN');
+        } else {
+          throw new Error('Phản hồi không hợp lệ');
+        }
+      } catch (err) {
+        // FALLBACK: dùng localStorage để vẫn hiển thị số tăng cục bộ (trong trình duyệt này)
+        try {
+          const k = 'local-visit-count';
+          const v = Number(localStorage.getItem(k) || '0') + 1;
+          localStorage.setItem(k, String(v));
+          viewEl.textContent = `${v.toLocaleString('vi-VN')} (Mọi thời gian)`;
+        } catch {
+          viewEl.textContent = 'không tải được';
+        }
+        // gợi ý mở DevTools kiểm tra lỗi nếu cần
+        console.warn('CountAPI lỗi hoặc bị chặn:', err);
+      }
+    })();
   </script>
 </body>
 </html>
+
