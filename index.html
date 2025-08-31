@@ -278,17 +278,20 @@
     <p>Chia sẻ kiến thức, tài liệu Tin học và nhiều nội dung bổ ích.</p>
 
     <div class="search-box">
-      <form id="searchForm">
-        <input
-          type="text"
-          id="searchInput"
-          class="search-input"
-          placeholder="Bạn đang tìm kiếm điều gì ?"
-          required
-        />
-        <button type="submit"><span class="material-icons">search</span> Tìm kiếm</button>
-      </form>
-    </div>
+  <form action="https://www.google.com/search" method="get" target="_blank">
+    <input
+      type="text"
+      name="q"
+      class="search-input"
+      placeholder="Bạn đang tìm kiếm điều gì ?"
+      required
+    />
+    <button type="submit">
+      <span class="material-icons">search</span> Tìm kiếm
+    </button>
+  </form>
+</div>
+
   </main>
 
     <footer style="display: flex; justify-content: space-between; align-items: center; padding: 20px 120px;">
