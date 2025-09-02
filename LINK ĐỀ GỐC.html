@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kiểm tra TIN HỌC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    
+body {
+  font-family: 'Poppins', sans-serif;
+  padding: 40px 20px;
+  background: linear-gradient(to bottom right, #eef7ff, #d0e8ff);
+  max-width: 1000px;
+  margin: auto;
+  color: #2c3e50;
+}
+
+h2 {
+  color: #0d47a1;
+  margin-bottom: 18px;
+  font-size: 24px;
+}
+
+.section {
+  margin-bottom: 40px;
+  background: #ffffff;
+  padding: 30px 35px;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+}
+
+.section:hover {
+  transform: scale(1.01);
+}
+
+.question {
+  margin-bottom: 26px;
+}
+
+.question-title {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.options label,
+.ds-options label {
+  display: block;
+  margin-left: 24px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.options label:hover,
+.ds-options label:hover {
+  background-color: #f0f8ff;
+}
+
+input[type="text"] {
+  font-size: 18px;
+  padding: 12px 16px;
+  width: 380px;
+  border-radius: 14px;
+  border: 2px solid #ccc;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+  margin-bottom: 20px;
+  background: #fff;
+}
+
+input[type="text"]:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
+}
+
+button {
+  font-size: 18px;
+  background: #1976d2;
+  color: white;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 25px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background: #125aa0;
+  transform: translateY(-2px);
+}
+
+#result {
+  margin-top: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+#timer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #ffffff;
+  border: 3px solid #e53935;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #e53935;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+label input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+  vertical-align: middle;
+}
+
+::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+</style>
+
+</head>
+<body>
+
+  <h2>Thông tin thí sinh:</h2>
+  <input type="text" id="studentName" placeholder="Nhập số báo danh" />
+  <div id="timer"></div>
+
+  <div class="section">
+    <h2>PHẦN I. Thí sinh trả lời các câu hỏi sau. Mỗi câu hỏi thí sinh chỉ được chọn một phương án (6.0 điểm)</h2>
+    <div id="part1"></div>
+  </div>
+
+  <div class="section">
+    <h2>PHẦN II. Thí sinh trả lời các câu hỏi sau. Trong các ý a) b) c) d) thí sinh chọn đúng hoặc sai (4.0 điểm)</h2>
+    <div id="part2"></div>
+  </div>
+
+  <button onclick="submitTest()">Nộp bài</button>
+
+  <div id="result"></div>
+
+  <script>
+    const part1Questions = [
+      {
+        question: "Thiết bị nào sau đây dùng để kết nối nhiều máy tính trong một mạng nội bộ?",
+        options: [
+          "Máy in laser tốc độ cao.",
+          "Switch dùng chuyển mạch.",
+          "Bàn phím kết nối USB.",
+          "Ổ cứng gắn ngoài SATA."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Phát biểu nào sau đây là đúng về giao thức TCP/IP?",
+        options: [
+          "TCP/IP là bộ giao thức dùng để định tuyến dữ liệu .",
+          "TCP/IP là phần mềm điều khiển thiết bị mạng.",
+          "TCP/IP là tên viết tắt của công nghệ bảo mật.",
+          "TCP/IP là giao diện điều khiển hệ thống mạng."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Trí tuệ nhân tạo (AI) là gì trong lĩnh vực công nghệ thông tin?",
+        options: [
+          "Hệ thống phần cứng điều khiển tự động máy móc theo quy trình cố định.",
+          "Tập hợp các dữ liệu được lưu trữ và xử lý theo yêu cầu của người dùng.",
+          "Khả năng mô phỏng tư duy và hành vi của con người bằng máy tính.",
+          "Phần mềm giúp lưu trữ thông tin trong cơ sở dữ liệu một cách an toàn."
+        ],
+        answerIndex: 2
+      },
+      {
+        question: "Một số thiết bị kết nối mạng phổ biến hiện nay gồm:",
+        options: [
+          "Máy in, chuột không dây, màn hình cảm ứng.",
+          "Router, Access Point, Switch, Modem.",
+          "Ổ cứng, ổ đĩa quang, máy quét ảnh.",
+          "Điện thoại, máy nghe nhạc, máy ảnh."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Phần nào dưới đây giúp phân chia dữ liệu thành gói và đảm bảo truyền tin đúng đích?",
+        options: [
+          "Giao thức TCP trong bộ TCP/IP.",
+          "Cáp mạng nối trực tiếp các thiết bị.",
+          "Hệ điều hành trong máy tính.",
+          "Ổ đĩa lưu trữ nội dung văn bản."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Trong mạng máy tính, chức năng chính của Modem là?",
+        options: [
+          "Phát sóng Wi-Fi tốc độ cao cho mạng LAN	.",
+          "Mã hóa và giải mã tín hiệu Internet.",
+          "Tạo địa chỉ MAC cho máy chủ mạng.",
+          "Quản lý thư mục người dùng trên mạng."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Ứng dụng AI nào sau đây thường dùng trong đời sống hằng ngày?",
+        options: [
+          "Trợ lí ảo điều khiển thiết bị thông minh bằng giọng nói.",
+          "Hệ điều hành giúp kết nối các thiết bị thông qua Bluetooth.",
+          "Thiết bị lưu trữ dữ liệu sử dụng chuẩn USB tốc độ cao.",
+          "Trình duyệt web dùng để mở các trang thông tin trực tuyến."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Giao thức là gì trong mạng máy tính?",
+        options: [
+          "Quy tắc chung điều phối việc truyền tin.",
+          "Thiết bị dùng điều khiển sóng vô tuyến.",
+          "Tên gọi phần mềm cài trên máy chủ.",
+          "Cách gắn cáp mạng vào modem."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Loại đường truyền nào dưới đây thuộc dạng hữu tuyến?",
+        options: [
+          "Cáp mạng RJ45 nối từ modem đến máy.",
+          "Bluetooth giữa điện thoại với tai nghe	.",
+          "Sóng radio dùng trong truyền hình số.",
+          "Wi-Fi truy cập mạng không cần dây."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Công nghệ AI trong nhận dạng khuôn mặt thường sử dụng yếu tố nào sau đây?",
+        options: [
+          "Đặc điểm hình học khuôn mặt kết hợp với học máy từ dữ liệu huấn luyện.",
+          "Kết nối mạng LAN tốc độ cao để tăng tốc độ xử lý ảnh chân dung.",
+          "Giao diện đồ họa giúp cải thiện màu sắc của ảnh nhận diện khuôn mặt.",
+          "Cơ sở dữ liệu người dùng lưu trữ trên thiết bị có cổng kết nối USB-C"
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Access Point hoạt động với vai trò nào sau đây?",
+        options: [
+          "Phát hiện virus lây lan qua mạng	.",
+          "Cung cấp truy cập Wi-Fi trong mạng LAN	.",
+          "Lưu trữ dữ liệu mạng một cách an toàn	.",
+          "Mã hóa thông tin từ máy in mạng."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Trong bộ giao thức TCP/IP, IP thực hiện nhiệm vụ gì?",
+        options: [
+          "Quản lý địa chỉ và định tuyến gói tin.",
+          "Giám sát hoạt động của các phần mềm.",
+          "Mã hóa và giải nén tệp dữ liệu đa phương tiện.",
+          "Cấp quyền truy cập máy chủ mạng."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Một ví dụ tiêu biểu cho việc ứng dụng AI trong y tế là gì?",
+        options: [
+          "Phân tích kết quả xét nghiệm và đưa ra chẩn đoán hỗ trợ bác sĩ.",
+          "Lưu trữ hồ sơ bệnh án điện tử và phân quyền truy cập người dùng.",
+          "Thiết kế giao diện phần mềm khám bệnh có màu sắc trực quan.",
+          "Cài đặt phần mềm diệt virus để bảo vệ dữ liệu bệnh nhân."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Server thường thực hiện chức năng nào?",
+        options: [
+          "Lưu trữ và cung cấp tài nguyên cho các máy khác.",
+          "Phát Wi-Fi.",
+          "Mã hóa dữ liệu đầu vào.",
+          "Tăng băng thông."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Phân biệt chính giữa Router và Switch là:",
+        options: [
+          "Router hoạt động trong mạng LAN, Switch hoạt động trong mạng WAN.",
+          "Router định tuyến giữa các mạng, Switch kết nối trong cùng mạng.",
+          "Switch có địa chỉ IP riêng, Router không có.",
+          "Switch phát Wi-Fi, Router không phát được."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Giao thức mạng nào sau đây hoạt động theo mô hình lớp ứng dụng?",
+        options: [
+          "TCP",
+          "IP	",
+          "HTTP.",
+          "Ethernet."
+        ],
+        answerIndex: 2
+      },
+      {
+        question: "Trong quá trình huấn luyện mạng nơ-ron sâu nhiều lớp (deep neural networks), hiện tượng gradient biến mất (vanishing gradient) gây ra hậu quả nào dưới đây một cách gián tiếp nhưng thường xuyên nhất?",
+        options: [
+          "Trọng số của các lớp đầu bị thay đổi liên tục khiến kết quả không ổn định ở các lớp cuối.",
+          "Các lớp gần đầu mạng học chậm hoặc gần như không học được vì đạo hàm quá nhỏ.	",
+          "Hàm kích hoạt ở các lớp đầu trở nên tuyến tính khiến mô hình không thể phi tuyến.",
+          "Tốc độ lan truyền tiến tăng cao gây rối loạn gradient ở các lớp ẩn."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Một hệ thống camera giao thông sử dụng AI có thể thực hiện chức năng nào sau đây?",
+        options: [
+          "Phát hiện và nhận diện phương tiện vi phạm giao thông qua hình ảnh.",
+          "Quản lý thời gian hoạt động của đèn tín hiệu theo khung giờ cố định.	",
+          "Phát âm thanh cảnh báo mỗi khi xe vượt quá tốc độ giới hạn cho phép.",
+          "Phát sóng trực tiếp hình ảnh giao thông qua các kênh truyền hình địa phương."
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Điểm nổi bật khi ứng dụng AI trong dịch vụ khách hàng là gì?",
+        options: [
+          "Hỗ trợ trả lời nhanh nhiều yêu cầu cùng lúc bằng chatbot.",
+          "Lưu trữ thông tin khách hàng trong một CSDL.	",
+          "Mã hóa các cuộc gọi thoại bằng công nghệ bảo mật tiên tiến.",
+          "Tự động phản hồi yêu cầu của khách hàng"
+        ],
+        answerIndex: 0
+      },
+      {
+        question: "Một tổ chức muốn thiết kế mạng LAN gồm 10 máy tính, máy in, và Internet. Yêu cầu nào bắt buộc?",
+        options: [
+          "Phải có tối thiểu 2 Switch để dự phòng.",
+          "Cần Switch, Modem và cáp mạng hợp chuẩn.	",
+          "Mỗi máy cần địa chỉ MAC riêng biệt	.",
+          "Có thể dùng chung một địa chỉ IP."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Khi thiết bị được gán IP động bởi router, điều gì có thể xảy ra khi khởi động lại máy?",
+        options: [
+          "Thiết bị sẽ không thể kết nối Internet do lỗi phần cứng.",
+          "IP làm gián đoạn truy cập từ thiết bị khác.	",
+          "Kết nối Wi-Fi sẽ mất tạm thời cho đến khi gán IP tĩnh	.",
+          "Phần mềm trình duyệt không nhận diện được mạng LAN."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Một hệ thống trợ lý ảo có thể tự điều chỉnh phản hồi dựa trên mức độ hài lòng ngầm định của người dùng sau mỗi lượt tương tác. Hệ thống thường xuyên thử các cách trả lời khác nhau để chọn ra phương án hiệu quả nhất cho những lần tiếp theo. Cơ chế này thể hiện rõ nhất đặc điểm của phương pháp nào sau đây?",
+        options: [
+          "Phân tích ngữ nghĩa ngôn ngữ nhằm nhận biết mục tiêu giao tiếp chính xác hơn.",
+          "Phân lớp có giám sát dựa trên dữ liệu huấn luyện thu thập từ tương tác người dùng.	",
+          "Học không giám sát để tự động phân nhóm phản ứng của người dùng theo thói quen.",
+          "Học tăng cường với quá trình đánh giá phản hồi để cải thiện chính sách hành động."
+        ],
+        answerIndex: 3
+      },
+      {
+        question: "Nếu một gói tin bị lỗi tại tầng mạng, tầng nào sẽ phát hiện và xử lý?",
+        options: [
+          "Tầng ứng dụng.",
+          "Tầng liên kết dữ liệu.	",
+          "Tầng vận chuyển 	.",
+          "Tầng mạng."
+        ],
+        answerIndex: 1
+      },
+      {
+        question: "Trong mô hình giao thức TCP/IP, khi một gói tin truyền từ máy A đến máy B qua mạng Internet, tầng nào chịu trách nhiệm định tuyến và chọn đường đi cho gói tin?",
+        options: [
+          "Tầng mạng đảm bảo gói tin tới đúng địa chỉ IP đích qua nhiều bộ định tuyến.",
+          "Tầng vận chuyển phân mảnh gói tin và gắn địa chỉ cổng của ứng dụng đích.	",
+          "Tầng truy cập mạng ánh xạ địa chỉ IP sang địa chỉ MAC cho truyền nội bộ	.",
+          "Tầng ứng dụng xử lý định tuyến dựa trên tên miền và giao thức sử dụng."
+        ],
+        answerIndex: 0
+      }
+
+
+
+
+    ];
+
+    const part2Questions = [
+      {
+        title: "Một học sinh cài camera AI nhận diện khuôn mặt tại cửa chính, kết nối trực tiếp với điện thoại qua ứng dụng đám mây. ",
+        items: [
+          { text: "Nếu thiết bị sử dụng chuẩn ONVIF và mở cổng port forwarding trên router, hình ảnh có thể truy cập từ xa qua Internet.", correct: true },
+          { text: "Khi hệ thống không lưu video mà chỉ ghi nhật ký thời gian sự kiện, thì không cần quan tâm đến bảo mật lưu trữ.", correct: false },
+          { text: "Mô hình nhận diện khuôn mặt hoạt động trên ảnh đen trắng sẽ chính xác hơn vì loại bỏ nhiễu màu.", correct: false },
+          { text: "Kẻ tấn công có thể giả mạo địa chỉ MAC của thiết bị để gửi ảnh giả đến mô hình nếu router thiếu kiểm soát lớp mạng.", correct: true }
+        ]
+      },
+      {
+        title: "Một sinh viên kiểm thử mạng bằng công cụ sniffing và ghi nhận các truy vấn DNS từ thiết bị cá nhân gửi qua Wi-Fi công cộng.",
+        items: [
+          { text: "Các truy vấn DNS không mã hóa nên vẫn bị thu thập được dù người dùng vào trang sử dụng HTTPS.", correct: true },
+          { text: "HTTP sử dụng giao thức TCP nên nội dung truyền tải qua HTTP mặc định có thể đảm bảo bảo mật.", correct: false },
+          { text: "Khi trình duyệt hiển thị biểu tượng ổ khóa HTTPS, điều đó chứng minh trang web không bị giả mạo.", correct: false },
+          { text: "Cơ chế xác thực hai lớp hoạt động độc lập với quá trình truyền tải dữ liệu, tăng cường bảo vệ tài khoản.", correct: true }
+        ]
+      },
+      {
+        title: "Một tổ chức triển khai mạng nội bộ sử dụng giao thức TCP/IP, các máy tính kết nối qua switch và router để truy cập Internet.",
+        items: [
+          { text: "Giao thức UDP đảm bảo truyền dữ liệu theo thứ tự và kiểm tra lỗi để đảm bảo tính toàn vẹn của dữ liệu.", correct: false },
+          { text: "Địa chỉ IP lớp C có thể chứa tối đa 512 thiết bị trong cùng một mạng con.", correct: false },
+          { text: "ARP dùng để phân giải địa chỉ IP sang địa chỉ MAC trong mạng nội bộ và cũng hoạt động trên Internet.", correct: false },
+          { text: "Giao thức HTTP hoạt động trực tiếp trên tầng mạng (Network Layer) để truyền dữ liệu.", correct: false }
+        ]
+      },
+      
+      {
+        title: "Một sinh viên sử dụng máy tính cá nhân để kiểm tra kết nối Internet bằng lệnh ping và traceroute đến một server ở nước ngoài.",
+        items: [
+          { text: "Giao thức ICMP được dùng trong lệnh ping để gửi gói tin yêu cầu và nhận phản hồi từ máy đích.", correct: true },
+          { text: "Lệnh traceroute sử dụng giao thức ARP để xác định địa chỉ MAC của các bộ định tuyến trung gian trên đường đi.", correct: false },
+          { text: " Nếu firewall của server chặn ICMP, kết quả ping sẽ không nhận được phản hồi dù server vẫn đang hoạt động.", correct: true },
+          { text: "Ping có thể thành công đến một máy tính nội bộ dù máy đó chưa được cấp địa chỉ IP từ DHCP.", correct: false }
+        ]
+      }
+    ];
+
+    function shuffleArray(arr) {
+      return arr.map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value);
+    }
+
+    function renderPart1() {
+      const container = document.getElementById("part1");
+      container.innerHTML = "";
+      const questionsShuffled = shuffleArray(part1Questions);
+
+      questionsShuffled.forEach((q, i) => {
+        let optionsWithIndex = q.options.map((text, idx) => ({ text, idx }));
+        optionsWithIndex = shuffleArray(optionsWithIndex);
+        const correctOptionIndex = optionsWithIndex.findIndex(o => o.idx === q.answerIndex);
+
+        let html = `<div class="question"><div class="question-title">Câu ${i + 1}. ${q.question}</div><div class="options">`;
+        optionsWithIndex.forEach((opt, idx) => {
+          const letter = String.fromCharCode(65 + idx);
+          html += `<label><input type="radio" name="q${i}" value="${idx}"> ${letter}. ${opt.text}</label>`;
+        });
+        html += `</div></div>`;
+
+        container.insertAdjacentHTML("beforeend", html);
+        questionsShuffled[i].shuffledAnswerIndex = correctOptionIndex;
+      });
+
+      window.part1ShuffledQuestions = questionsShuffled;
+    }
+
+    function renderPart2() {
+  const container = document.getElementById("part2");
+  container.innerHTML = "";
+  const questionsShuffled = shuffleArray(part2Questions);
+  window.part2ShuffledQuestions = questionsShuffled;
+
+  questionsShuffled.forEach((q, i) => {
+    let itemsWithIndex = q.items.map((item, idx) => ({ ...item, idx }));
+    itemsWithIndex = shuffleArray(itemsWithIndex);
+
+    // Lưu items đã shuffle vào câu
+    questionsShuffled[i].itemsShuffled = itemsWithIndex;
+
+    let html = `<div class="question"><div class="question-title">Câu ${i + 1}. ${q.title}</div><div class="ds-options">`;
+    itemsWithIndex.forEach((item, idx) => {
+      const letter = String.fromCharCode(97 + idx);
+      html += `
+        <label>
+          <b>${letter})</b> ${item.text}<br>
+          <input type="radio" name="ds${i}_${idx}" value="true"> Đúng
+          <input type="radio" name="ds${i}_${idx}" value="false"> Sai
+        </label>
+      `;
+    });
+    html += `</div></div>`;
+    container.insertAdjacentHTML("beforeend", html);
+  });
+}
+
+    function submitTest() {
+  const name = document.getElementById("studentName").value.trim();
+
+  let total = 0;
+
+  if (name === "") {
+    total = 0;  // Nếu chưa nhập số báo danh thì điểm = 0
+  } else {
+    // Tính điểm phần 1
+    let scorePart1 = 0;
+    const questions = window.part1ShuffledQuestions || [];
+    questions.forEach((q, i) => {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (selected && parseInt(selected.value) === q.shuffledAnswerIndex) {
+        scorePart1 += 6 / questions.length;
+      }
+    });
+
+    // Tính điểm phần 2 (sửa lại phần này)
+    let scorePart2 = 0;
+const part2 = window.part2ShuffledQuestions || [];
+part2.forEach((q, i) => {
+  let correctCount = 0;
+  const itemsShuffled = q.itemsShuffled || [];
+  itemsShuffled.forEach((item, idx) => {
+    const selected = document.querySelector(`input[name="ds${i}_${idx}"]:checked`);
+    if (selected && ((selected.value === "true") === item.correct)) {
+      correctCount++;
+    }
+  });
+  if (correctCount === 4) scorePart2 += 1.0;
+  else if (correctCount === 3) scorePart2 += 0.5;
+  else if (correctCount === 2) scorePart2 += 0.25;
+  else if (correctCount === 1) scorePart2 += 0.1;
+});
+
+
+    total = scorePart1 + scorePart2;
+  }
+
+  total = total.toFixed(2);
+  const displayName = name || "∅";
+
+  // Hiển thị kết quả (giữ nguyên như bạn có)
+  document.body.innerHTML = `
+    <div style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 45px;
+      text-align: center;
+      flex-direction: column;
+    ">
+      <div>
+        Số báo danh: <b>${displayName}</b><br>
+        Tổng điểm: <b>${total}</b> / 10.00
+      </div>
+    </div>
+  `;
+
+  // Tạo canvas để vẽ kết quả ra ảnh (giữ nguyên)
+  const canvas = document.createElement("canvas");
+  canvas.width = 600;
+  canvas.height = 300;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#222";
+  ctx.textAlign = "center";
+
+  ctx.font = "28px Poppins, sans-serif";
+  ctx.fillText(`Số báo danh: ${displayName}`, canvas.width / 2, 100);
+
+  ctx.font = "36px Poppins, sans-serif";
+  ctx.fillText(`Tổng điểm: ${total} / 10.00`, canvas.width / 2, 180);
+
+  canvas.toBlob(function(blob) {
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${displayName}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+}
+
+
+    // Khởi động
+    window.onload = function () {
+      renderPart1();
+      renderPart2();
+    };
+
+    // Đếm ngược thời gian
+    let totalTime = 50 * 60;
+    function updateTimer() {
+      const minutes = Math.floor(totalTime / 60);
+      const seconds = totalTime % 60;
+      document.getElementById("timer").innerText = `Thời gian còn lại: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+      if (totalTime <= 0) {
+        clearInterval(timerInterval);
+        alert("Hết thời gian! Bài kiểm tra sẽ được nộp tự động.");
+        submitTest();
+      }
+      totalTime--;
+    }
+    const timerInterval = setInterval(updateTimer, 1000);
+  </script>
+
+</body>
+</html>
