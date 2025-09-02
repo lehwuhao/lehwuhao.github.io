@@ -265,11 +265,37 @@
       <h1>Chào mừng đến với trang web của Hữu Hào</h1>
     </div>
   </header>
+  <!-- Thanh header -->
+<header style="
+    color:white;
+    padding:12px 15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:Arial, sans-serif;">
+
+  
+  <div style="display:flex; align-items:center; gap:15px;">
+    <span id="displayUser" style="font-weight:bold;"></span>
+    <button onclick="logout()" style="
+      background:#f9f8f5;
+      color:#000;
+      border:none;
+      padding:6px 12px;
+      border-radius:6px;
+      cursor:pointer;
+      font-weight:bold;
+      transition:0.3s;">
+      Đăng xuất
+    </button>
+  </div>
+</header>
 
   <nav>
     <a href="index.html"><span class="material-icons">home</span> Trang chủ</a>
     <a href="tai-lieu.html"><span class="material-icons">folder</span> Tài liệu</a>
     <a href="https://chatgpt.com/" target="_blank"><span class="material-icons">smart_toy</span> Chat với AI</a>
+    <a href="kiemtra.html">KIỂM TRA</a>
     <a href="#"><span class="material-icons">menu_book</span> Khác</a>
   </nav>
 
@@ -307,5 +333,21 @@
 
 
 </body>
+<script>
+  const user = localStorage.getItem("loggedInUser");
+  const displayUser = document.getElementById("displayUser");
+
+  if (user) {
+    displayUser.textContent = "👤 " + user;  // Hiện tên user kèm icon
+  } else {
+    // Nếu chưa đăng nhập thì bắt quay về trang đăng nhập
+    window.location.href = "auth.html";
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "auth.html";
+  }
+</script>
 </html>
 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng nhập / Đăng ký</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ef4877 0%, #ACB6E5 100%);
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .auth-box {
+      background: #fff;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 360px;
+      animation: fadeIn 0.5s ease;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: #f64ea7;
+      outline: none;
+      box-shadow: 0 0 5px rgba(232, 72, 179, 0.5);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ac0469;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #f11197;
+      transform: translateY(-2px);
+    }
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+    .link a {
+      color: #dc18a7;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .link a:hover {
+      text-decoration: underline;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Căn checkbox thẳng hàng đẹp */
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+      margin: 8px 0;
+    }
+    .remember input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <!-- Form đăng nhập -->
+    <div id="loginBox">
+      <h2>🔑 Đăng nhập</h2>
+      <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Vui lòng nhập tên đăng nhập" required>
+        <input type="password" id="loginPassword" placeholder="Mật khẩu" required>
+
+        <!-- Checkbox ghi nhớ -->
+        <label class="remember">
+          <input type="checkbox" id="rememberMe">
+          <span>Ghi nhớ tài khoản</span>
+        </label>
+
+        <button type="submit">Đăng nhập</button>
+      </form>
+      <p style="color:#b30000; font-size:13px; text-align:center; margin-top:10px;">
+      ⚠️ LƯU Ý: Nếu bạn đã nhập đúng thông tin nhưng vẫn không đăng nhập được, 
+      vui lòng đăng ký lại. Xin chân thành cảm ơn!
+    </p>
+      <div class="link">Chưa có tài khoản? <a onclick="showRegister()">Đăng ký ngay</a></div>
+    </div>
+
+    <!-- Form đăng ký -->
+    <div id="registerBox" style="display:none;">
+      <h2>📝 Đăng ký</h2>
+      <form id="registerForm">
+        <input type="text" id="registerUsername" placeholder="Tạo tên đăng nhập của bạn" required>
+        <input type="password" id="registerPassword" placeholder="Tạo mật khẩu của bạn" required>
+        <button type="submit">Tạo tài khoản</button>
+      </form>
+      <div class="link">Đã có tài khoản? <a onclick="showLogin()">Đăng nhập</a></div>
+    </div>
+  </div>
+
+  <script>
+    const loginBox = document.getElementById("loginBox");
+    const registerBox = document.getElementById("registerBox");
+    const rememberMe = document.getElementById("rememberMe");
+
+    function showRegister() {
+      loginBox.style.display = "none";
+      registerBox.style.display = "block";
+    }
+    function showLogin() {
+      registerBox.style.display = "none";
+      loginBox.style.display = "block";
+    }
+
+    // Tự động điền nếu có lưu
+    window.onload = () => {
+      const savedUser = localStorage.getItem("savedUser");
+      const savedPass = localStorage.getItem("savedPass");
+      if (savedUser && savedPass) {
+        document.getElementById("loginUsername").value = savedUser;
+        document.getElementById("loginPassword").value = savedPass;
+        rememberMe.checked = true;
+      }
+    };
+
+    // Đăng ký
+    document.getElementById("registerForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("registerUsername").value;
+      const password = document.getElementById("registerPassword").value;
+
+      localStorage.setItem("accountUser", username);
+      localStorage.setItem("accountPass", password);
+
+      alert("Đăng ký thành công! Mời bạn đăng nhập.");
+      showLogin();
+    });
+
+    // Đăng nhập
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("loginUsername").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const savedUser = localStorage.getItem("accountUser");
+      const savedPass = localStorage.getItem("accountPass");
+
+      if (username === savedUser && password === savedPass) {
+        if (rememberMe.checked) {
+          localStorage.setItem("savedUser", username);
+          localStorage.setItem("savedPass", password);
+        } else {
+          localStorage.removeItem("savedUser");
+          localStorage.removeItem("savedPass");
+        }
+        localStorage.setItem("loggedInUser", username);
+        window.location.href = "index.html";
+      } else {
+        alert("Sai tài khoản hoặc mật khẩu!");
+      }
+    });
+  </script>
+</body>
+</html>
